@@ -1,0 +1,61 @@
+services:
+  customerservice:
+    image: micromagikerne/customer-service:latest-dev
+    ports:
+    - 8201:80
+    depends_on:
+    - mongodb
+    environment: 
+      - connectionsstring=mongodb://root:password@mongodb:27017/?authSource=admin
+      - database=MikroDB
+      - collection=Customers
+      - secret=kerrik123456789123456789123456789
+      - issuer=authservice123456789123456789
+    networks:
+      - mikronetwork
+  nginx:
+    image: nginx:latest
+    ports:
+    - 4000:4000
+    depends_on:
+    - customerservice
+    volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - mikronetwork
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: MikroDB
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - mikronetwork
+
+  loki:
+    image: grafana/loki
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - mikronetwork
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    networks:
+      - mikronetwork
+      - loki
+
+volumes:
+  mongodb_data_container:
+networks:
+  mikronetwork:
+  loki:
