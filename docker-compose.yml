@@ -37,7 +37,7 @@ services:
       - Rabbito
       restart: unless-stopped
       environment:
-      - rabbithostname=rabbit-dev
+      - rabbithostname=rabbitmq-dev
       - rabbitqueue=bidq
       - cataloghttpbase=http://catalogservice:80
       - memcache=memcached:11211
@@ -63,10 +63,12 @@ services:
       - mikronetwork
      
   memcached:
-      image: memcached:1.6.9
+      image: memcached
       ports:
       - 11211:11211
-
+      command: -m 64
+      networks:
+        - mikronetwork
   nginx:
     image: nginx:latest
     ports:
