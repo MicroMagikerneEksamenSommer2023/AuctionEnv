@@ -39,8 +39,8 @@ services:
       environment:
       - rabbithostname=rabbitmq-dev
       - rabbitqueue=bidq
-      - cataloghttpbase=http://catalogservice:80
-      - memcache=memcached:11211
+      - cataloghttpbase=http://catalogservice:80/catalogservice/v1/
+      - redisconnection=redis:6379
       networks:
       - mikronetwork
     
@@ -61,14 +61,16 @@ services:
       - rabbitqueue=bidq
       networks:
       - mikronetwork
-     
-  memcached:
-      image: memcached
-      ports:
-      - 11211:11211
-      command: -m 64
-      networks:
-        - mikronetwork
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - mikronetwork
+
   nginx:
     image: nginx:latest
     ports:
@@ -121,6 +123,7 @@ services:
 volumes:
   mongodb_data_container:
   images:
+  redis-data:
 networks:
   mikronetwork:
   loki:
