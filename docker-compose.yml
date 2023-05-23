@@ -27,6 +27,21 @@ services:
       - mikronetwork
       volumes: 
       - images:/srv/images
+  valuationservice:
+      image: micromagikerne/valuation-service:latest-dev
+      ports:
+      - 8205:80
+      depends_on:
+      - mongodb
+      environment:
+      - imagepath=//srv/images
+      - connectionsstring=mongodb://root:password@mongodb:27017/?authSource=admin
+      - database=MikroDB
+      - collection=Valuations
+      networks:
+      - mikronetwork
+      volumes: 
+      - images:/srv/images
 
   bidreceiver:
       image: micromagikerne/auctiontrackerreceiver-service:latest-dev
