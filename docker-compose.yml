@@ -92,7 +92,7 @@ services:
     - "8206:80"
     environment:
       - HostnameVault=vault
-      - CustomerServiceBaseAddress=http://customerservice:80/customerservice/v1/
+      - customerhttpbase=http://customerservice:80/customerservice/v1/
     networks:
       - mikronetwork
       
