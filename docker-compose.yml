@@ -25,6 +25,7 @@ services:
       - connectionsstring=mongodb://root:password@mongodb:27017/?authSource=admin
       - database=MikroDB
       - collection=Catalog
+      - redisconnection=redis:6379
       networks:
       - mikronetwork
       volumes: 
@@ -75,8 +76,7 @@ services:
       environment:
       - connectionsstring=mongodb://root:password@mongodb:27017/?authSource=admin
       - database=Bids
-      - collection=ActiveBids
-      - collection2=BidLogs
+      - collection=BidLogs
       - rabbithostname=rabbitmq-dev
       - rabbitqueue=bidq
       networks:
@@ -88,6 +88,7 @@ services:
     depends_on:
       - vault_dev
       - script
+    restart: unless-stopped
     ports:
     - "8206:80"
     environment:
@@ -114,6 +115,9 @@ services:
     healthcheck:
       retries: 5
     command: server -dev -dev-root-token-id="00000000-0000-0000-0000-000000000000"
+    networks:
+      - mikronetwork
+      
 
   script:
     image: hashicorp/vault:latest
@@ -124,6 +128,9 @@ services:
       retries: 5
     volumes:
       - ./populate_vault.sh:/app/populate_vault.sh
+    networks:
+      - mikronetwork
+      
 
   redis:
     image: redis
