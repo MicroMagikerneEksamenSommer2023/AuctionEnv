@@ -10,6 +10,7 @@ services:
       - connectionsstring=mongodb://root:password@mongodb:27017/?authSource=admin
       - database=MikroDB
       - collection=Customers
+      - lokihostname=loki
     networks:
       - mikronetwork
 
@@ -26,6 +27,7 @@ services:
       - database=MikroDB
       - collection=Catalog
       - redisconnection=redis:6379
+      - lokihostname=loki
       networks:
       - mikronetwork
       volumes: 
@@ -42,6 +44,7 @@ services:
       - connectionsstring=mongodb://root:password@mongodb:27017/?authSource=admin
       - database=MikroDB
       - collection=Valuations
+      - lokihostname=loki
       networks:
       - mikronetwork
       volumes: 
@@ -61,6 +64,7 @@ services:
       - rabbitqueue=bidq
       - cataloghttpbase=http://catalogservice:80/catalogservice/v1/
       - redisconnection=redis:6379
+      - lokihostname=loki
       networks:
       - mikronetwork
     
@@ -79,6 +83,7 @@ services:
       - collection=BidLogs
       - rabbithostname=rabbitmq-dev
       - rabbitqueue=bidq
+      - lokihostname=loki
       networks:
       - mikronetwork
 
@@ -94,6 +99,7 @@ services:
     environment:
       - HostnameVault=vault
       - customerhttpbase=http://customerservice:80/customerservice/v1/
+      - lokihostname=loki
     networks:
       - mikronetwork
       
